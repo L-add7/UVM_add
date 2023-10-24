@@ -40,31 +40,33 @@ endtask
 task my_driver::drive_one_pkt(my_transaction tr);
    bit [95:0] tmp_data1;
    bit [95:0] tmp_data2;
+   bit [7:0] data_add1[$];
+   bit [7:0] data_add2[$];
 
    tmp_data1 = tr.add1;
    tmp_data2 = tr.add2;
+
    for(int i = 0; i < 12; i++) begin
-      // data_q1.push_back(tmp_data1[7:0]);
-      vif.a <= tmp_data1[7:0];
+      data_add1.push_back(tmp_data1[7:0]);
+      // vif.a <= tmp_data1[7:0];
       tmp_data1 = (tmp_data1 >> 8);
-      // data_q1.push_back(tmp_data2[7:0]);
-      vif.b <= tmp_data2[7:0];
+      data_add2.push_back(tmp_data2[7:0]);
+      // vif.b <= tmp_data2[7:0];
       tmp_data2 = (tmp_data2 >> 8);
-      @(posedge vif.clk);
-      @(posedge vif.clk);
-      @(posedge vif.clk);
+
    end
 
 
    // `uvm_info("my_driver", "begin to drive one pkt", UVM_LOW);
    // repeat(3) @(posedge vif.clk);
 
-   // while(data_q1.size() > 0 && data_q2.size() > 0) begin
-   //    @(posedge vif.clk);
-   //    vif.a <= data_q1.pop_front(); 
-   //    vif.b <= data_q2.pop_front(); 
-
-   // end
+   while(data_add1.size() > 0 && data_add2.size() > 0) begin
+      @(posedge vif.clk);
+      vif.a <= data_add1.pop_front(); 
+      `uvm_info("vif", $sformatf("vif.a = 0x%0h", vif.a ), UVM_LOW);
+      vif.b <= data_add2.pop_front(); 
+      `uvm_info("vif", $sformatf("vif.b = 0x%0h", vif.b ), UVM_LOW);
+   end
 
    // @(posedge vif.clk);
    `uvm_info("my_driver", "end drive one pkt", UVM_LOW);
