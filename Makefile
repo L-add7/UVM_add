@@ -29,3 +29,7 @@ verdi:
 clean:
 	rm -rf csrc simv simv.daidir *.fsdb novas.* ucli.key
 	rm -rf *.log* *.vpd *.h urgReport verdiLog
+
+git:
+	git remote add origin git@github.com:L-add7/UVM_add.git
+	git push -u origin main

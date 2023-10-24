@@ -15,22 +15,61 @@ class my_driver extends uvm_driver;
    endfunction
 
    extern task main_phase(uvm_phase phase);
-   // extern task drive_one_pkt(my_transaction tr);
+   extern task drive_one_pkt(my_transaction tr);
 endclass
 
 task my_driver::main_phase(uvm_phase phase);
+   my_transaction tr;
    phase.raise_objection(this);
-   `uvm_info("my_driver","main_phase is called",UVM_LOW);
-    while(!vif.rst_n)
+   vif.a <= 8'b0;
+   vif.b <= 8'b0;
+   while(!vif.rst_n)
       @(posedge vif.clk);
-         for(int i = 0 ; i < 256 ; i++)begin
-            @(posedge vif.clk)
-               vif.a  <= $urandom_range(0,255);
-               vif.b  <= $urandom_range(0,255);
-               `uvm_info("my_driver","data is drived",UVM_LOW);
-         end
+   for(int i = 0; i < 2; i++) begin 
+      tr = new("tr");
+      assert(tr.randomize());
+      `uvm_info("tr", $sformatf("tr.add1 = 0x%0h", tr.add1 ), UVM_LOW);
+      `uvm_info("tr", $sformatf("tr.add2 = 0x%0h", tr.add2 ), UVM_LOW);
+      drive_one_pkt(tr);
+      // `uvm_info("vif", $sformatf("vif.c = 0x%0h", vif.c ), UVM_LOW);
+   end
+   repeat(5) @(posedge vif.clk);
    phase.drop_objection(this);
 endtask
+
+task my_driver::drive_one_pkt(my_transaction tr);
+   bit [95:0] tmp_data1;
+   bit [95:0] tmp_data2;
+
+   tmp_data1 = tr.add1;
+   tmp_data2 = tr.add2;
+   for(int i = 0; i < 12; i++) begin
+      // data_q1.push_back(tmp_data1[7:0]);
+      vif.a <= tmp_data1[7:0];
+      tmp_data1 = (tmp_data1 >> 8);
+      // data_q1.push_back(tmp_data2[7:0]);
+      vif.b <= tmp_data2[7:0];
+      tmp_data2 = (tmp_data2 >> 8);
+      @(posedge vif.clk);
+      @(posedge vif.clk);
+      @(posedge vif.clk);
+   end
+
+
+   // `uvm_info("my_driver", "begin to drive one pkt", UVM_LOW);
+   // repeat(3) @(posedge vif.clk);
+
+   // while(data_q1.size() > 0 && data_q2.size() > 0) begin
+   //    @(posedge vif.clk);
+   //    vif.a <= data_q1.pop_front(); 
+   //    vif.b <= data_q2.pop_front(); 
+
+   // end
+
+   // @(posedge vif.clk);
+   `uvm_info("my_driver", "end drive one pkt", UVM_LOW);
+endtask
+
 
 
 `endif

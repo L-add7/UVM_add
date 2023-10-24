@@ -4,6 +4,7 @@
 import uvm_pkg::*;
 
 `include "my_if.sv"
+`include "my_transaction.sv"
 `include "my_driver.sv"
 
 
@@ -39,6 +40,10 @@ initial begin
     forever begin
         #100 clk = ~clk;
     end
+end
+
+always @(posedge clk)begin
+    `uvm_info("mif", $sformatf("mif.c = 0x%0h", mif.c ), UVM_LOW);
 end
 
 initial begin
