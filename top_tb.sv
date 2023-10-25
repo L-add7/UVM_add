@@ -11,6 +11,8 @@ import uvm_pkg::*;
 // `include "my_driver_out.sv"
 `include "my_monitor_in.sv"
 `include "my_monitor_out.sv"
+`include "my_agent_in.sv"
+`include "my_agent_out.sv"
 `include "my_env.sv"
 
 
@@ -38,10 +40,10 @@ dut my_dut(
 );
 
 initial begin
-    uvm_config_db# (virtual my_if_in)::set(null,"uvm_test_top.drv_in","vif_in",mif_in);
-    uvm_config_db# (virtual my_if_in)::set(null,"uvm_test_top.i_mon","vif_in",mif_in);
+    uvm_config_db# (virtual my_if_in)::set(null,"uvm_test_top.i_agt.drv_in","vif_in",mif_in);
+    uvm_config_db# (virtual my_if_in)::set(null,"uvm_test_top.i_agt.i_mon","vif_in",mif_in);
 
-    uvm_config_db# (virtual my_if_out)::set(null,"uvm_test_top.o_mon","vif_out",mif_out);
+    uvm_config_db# (virtual my_if_out)::set(null,"uvm_test_top.o_agt.o_mon","vif_out",mif_out);
 
 end
 

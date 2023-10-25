@@ -31,4 +31,6 @@ clean:
 	rm -rf *.log* *.vpd *.h urgReport verdiLog
 
 git:
+	git add .
+	git commit 
 	git push -u origin main
