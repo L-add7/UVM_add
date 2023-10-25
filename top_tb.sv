@@ -3,9 +3,15 @@
 
 import uvm_pkg::*;
 
-`include "my_if.sv"
-`include "my_transaction.sv"
-`include "my_driver.sv"
+`include "my_if_in.sv"
+`include "my_if_out.sv"
+`include "my_transaction_in.sv"
+`include "my_transaction_out.sv"
+`include "my_driver_in.sv"
+// `include "my_driver_out.sv"
+`include "my_monitor_in.sv"
+`include "my_monitor_out.sv"
+`include "my_env.sv"
 
 
 module top_tb;
@@ -13,26 +19,34 @@ reg 		          clk;
 reg 		          rst_n;
 reg  [7:0]          a;
 reg  [7:0]          b;
+reg                 valid;               
 wire [8:0]	        c;
 
 
-my_if mif(clk,rst_n);
+my_if_in mif_in(clk,rst_n);
+my_if_out mif_out(clk,rst_n);
 // my_if output_if(clk,rst_n);
 
 dut my_dut(
     .clk(clk),
     .rst_n(rst_n),
-    .a(mif.a),
-    .b(mif.b),
-    .c(mif.c)
+    .a(mif_in.a),
+    .b(mif_in.b),
+    .valid_in(mif_in.valid),
+    .c(mif_out.c),
+    .valid_out(mif_out.valid)
 );
 
 initial begin
-    uvm_config_db# (virtual my_if)::set(null,"uvm_test_top","vif",mif);
+    uvm_config_db# (virtual my_if_in)::set(null,"uvm_test_top.drv_in","vif_in",mif_in);
+    uvm_config_db# (virtual my_if_in)::set(null,"uvm_test_top.i_mon","vif_in",mif_in);
+
+    uvm_config_db# (virtual my_if_out)::set(null,"uvm_test_top.o_mon","vif_out",mif_out);
+
 end
 
 initial begin
-    run_test("my_driver");
+    run_test("my_env");
 end
 
 initial begin
@@ -42,9 +56,10 @@ initial begin
     end
 end
 
-always @(posedge clk)begin
-    `uvm_info("mif", $sformatf("mif.c = 0x%0h", mif.c ), UVM_LOW);
-end
+// always @(posedge clk)begin
+//     `uvm_info("mif_out", $sformatf("mif_out.c = 0x%0h", mif_out.c ), UVM_LOW);
+// end
+
 
 initial begin
     rst_n = 0;
