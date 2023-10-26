@@ -3,7 +3,7 @@
 
 class my_transaction_out extends uvm_sequence_item;
 
-   rand bit [107:0]      sum;
+   bit [107:0]      sum;
 
    `uvm_object_utils(my_transaction_out)
 
@@ -15,6 +15,16 @@ class my_transaction_out extends uvm_sequence_item;
    function void my_print();
       $display("sum = %0h",sum);
    endfunction
+
+   function bit my_compare(my_transaction_out tr);
+   bit result;
+   
+   if(tr == null)
+      `uvm_fatal("my_transaction", "tr is null!!!!")
+   result = (sum == tr.sum);
+
+   return result; 
+endfunction
 
 endclass
 
