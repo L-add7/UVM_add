@@ -5,26 +5,29 @@ class my_transaction_out extends uvm_sequence_item;
 
    bit [107:0]      sum;
 
-   `uvm_object_utils(my_transaction_out)
+   `uvm_object_utils_begin(my_transaction_out)
+      `uvm_field_int(sum, UVM_ALL_ON)
+   `uvm_object_utils_end
+
 
 
    function new(string name = "my_transaction_out");
       super.new(name);
    endfunction
 
-   function void my_print();
-      $display("sum = %0h",sum);
-   endfunction
+   // function void my_print();
+   //    $display("sum = %0h",sum);
+   // endfunction
 
-   function bit my_compare(my_transaction_out tr);
-   bit result;
+   // function bit my_compare(my_transaction_out tr);
+   // bit result;
    
-   if(tr == null)
-      `uvm_fatal("my_transaction", "tr is null!!!!")
-   result = (sum == tr.sum);
+   // if(tr == null)
+   //    `uvm_fatal("my_transaction", "tr is null!!!!")
+   // result = (sum == tr.sum);
 
-   return result; 
-endfunction
+   // return result; 
+// endfunction
 
 endclass
 

@@ -31,6 +31,8 @@ clean:
 	rm -rf *.log* *.vpd *.h urgReport verdiLog
 
 git:
+	rm -rf csrc simv simv.daidir *.fsdb novas.* ucli.key
+	rm -rf *.log* *.vpd *.h urgReport verdiLog
 	git add .
 	git commit 
-	git push -u origin main
+	git push 

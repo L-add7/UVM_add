@@ -50,7 +50,7 @@ task my_model::main_phase(uvm_phase phase);
       tr_out.sum[98:90] =    tr_in.add1[(87):(80)]+  tr_in.add2[(87):(80)];
       tr_out.sum[107:99] =   tr_in.add1[(95):(88)]+  tr_in.add2[(95):(88)];
       `uvm_info("my_model", "get one transaction, copy and print it:", UVM_LOW)
-      tr_out.my_print();
+      tr_out.print();
       ap_out.write(tr_out);
    end
 
