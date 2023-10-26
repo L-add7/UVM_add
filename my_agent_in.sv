@@ -2,6 +2,7 @@
 `define MY_AGENT_IN__SV
 
 class my_agent_in extends uvm_agent ;
+   my_sequencer_in  sqr_in;
    my_driver_in     drv_in;
    my_monitor_in    mon_in;
    
@@ -20,6 +21,7 @@ endclass
 function void my_agent_in::build_phase(uvm_phase phase);
    super.build_phase(phase);
    if (is_active == UVM_ACTIVE) begin
+       sqr_in = my_sequencer_in::type_id::create("sqr_in", this);
        drv_in = my_driver_in::type_id::create("drv_in", this);
    end
    mon_in = my_monitor_in::type_id::create("mon_in", this);

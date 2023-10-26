@@ -1,6 +1,6 @@
 `ifndef MY_DRIVER_IN__SV
 `define MY_DRIVER_IN__SV
-class my_driver_in extends uvm_driver;
+class my_driver_in extends uvm_driver#(my_transaction_in);
 
    virtual my_if_in mif_in;
    `uvm_component_utils(my_driver_in);
@@ -19,7 +19,7 @@ class my_driver_in extends uvm_driver;
 endclass
 
 task my_driver_in::main_phase(uvm_phase phase);
-   my_transaction_in tr_in;
+   // my_transaction_in tr_in;
    phase.raise_objection(this);
    mif_in.a <= 8'b0;
    mif_in.b <= 8'b0;
@@ -27,11 +27,11 @@ task my_driver_in::main_phase(uvm_phase phase);
    while(!mif_in.rst_n)
       @(posedge mif_in.clk);
    for(int i = 0; i < 2; i++) begin 
-      tr_in = new("tr_in");
-      assert(tr_in.randomize());
+      req = new("req");
+      assert(req.randomize());
       // `uvm_info("tr", $sformatf("tr.add1 = 0x%0h", tr.add1 ), UVM_LOW);
       // `uvm_info("tr", $sformatf("tr.add2 = 0x%0h", tr.add2 ), UVM_LOW);
-      drive_one_pkt(tr_in);
+      drive_one_pkt(req);
       // `uvm_info("mif_in", $sformatf("mif_in.c = 0x%0h", mif_in.c ), UVM_LOW);
    end
    repeat(5) @(posedge mif_in.clk);

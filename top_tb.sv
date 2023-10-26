@@ -7,6 +7,7 @@ import uvm_pkg::*;
 `include "my_if_out.sv"
 `include "my_transaction_in.sv"
 `include "my_transaction_out.sv"
+`include "my_sequencer_in.sv"
 `include "my_driver_in.sv"
 // `include "my_driver_out.sv"
 `include "my_monitor_in.sv"
