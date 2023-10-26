@@ -5,6 +5,7 @@ class my_agent_in extends uvm_agent ;
    my_driver_in     drv_in;
    my_monitor_in    mon_in;
    
+   uvm_analysis_port #(my_transaction_in)  ap_in;
    function new(string name, uvm_component parent);
       super.new(name, parent);
    endfunction 
@@ -26,6 +27,7 @@ endfunction
 
 function void my_agent_in::connect_phase(uvm_phase phase);
    super.connect_phase(phase);
+   ap_in = mon_in.ap_in;
 endfunction
 
 `endif

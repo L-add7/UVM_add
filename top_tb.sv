@@ -13,16 +13,17 @@ import uvm_pkg::*;
 `include "my_monitor_out.sv"
 `include "my_agent_in.sv"
 `include "my_agent_out.sv"
+`include "my_model.sv"
 `include "my_env.sv"
 
 
 module top_tb;
 reg 		          clk;
 reg 		          rst_n;
-reg  [7:0]          a;
-reg  [7:0]          b;
-reg                 valid;               
-wire [8:0]	        c;
+reg  [7:0]            a;
+reg  [7:0]            b;
+reg                   valid;               
+wire [8:0]	          c;
 
 
 my_if_in mif_in(clk,rst_n);
@@ -40,10 +41,10 @@ dut my_dut(
 );
 
 initial begin
-    uvm_config_db# (virtual my_if_in)::set(null,"uvm_test_top.i_agt.drv_in","vif_in",mif_in);
-    uvm_config_db# (virtual my_if_in)::set(null,"uvm_test_top.i_agt.i_mon","vif_in",mif_in);
+    uvm_config_db# (virtual my_if_in)::set(null,"uvm_test_top.i_agt.drv_in","mif_in",mif_in);
+    uvm_config_db# (virtual my_if_in)::set(null,"uvm_test_top.i_agt.mon_in","mif_in",mif_in);
 
-    uvm_config_db# (virtual my_if_out)::set(null,"uvm_test_top.o_agt.o_mon","vif_out",mif_out);
+    uvm_config_db# (virtual my_if_out)::set(null,"uvm_test_top.o_agt.mon_out","mif_out",mif_out);
 
 end
 
