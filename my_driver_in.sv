@@ -20,22 +20,23 @@ endclass
 
 task my_driver_in::main_phase(uvm_phase phase);
    // my_transaction_in tr_in;
-   phase.raise_objection(this);
+   // phase.raise_objection(this);
    mif_in.a <= 8'b0;
    mif_in.b <= 8'b0;
    mif_in.valid <= 1'b0;
    while(!mif_in.rst_n)
       @(posedge mif_in.clk);
-   for(int i = 0; i < 2; i++) begin 
-      req = new("req");
-      assert(req.randomize());
+   for(int i = 0 ; i < 10 ; i = i + 1)begin
+   // while(1) begin 
+      seq_item_port.get_next_item(req);
+      drive_one_pkt(req);
+      seq_item_port.item_done();
       // `uvm_info("tr", $sformatf("tr.add1 = 0x%0h", tr.add1 ), UVM_LOW);
       // `uvm_info("tr", $sformatf("tr.add2 = 0x%0h", tr.add2 ), UVM_LOW);
-      drive_one_pkt(req);
       // `uvm_info("mif_in", $sformatf("mif_in.c = 0x%0h", mif_in.c ), UVM_LOW);
    end
    repeat(5) @(posedge mif_in.clk);
-   phase.drop_objection(this);
+   // phase.drop_objection(this);
 endtask
 
 task my_driver_in::drive_one_pkt(my_transaction_in tr_in);

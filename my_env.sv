@@ -27,8 +27,11 @@ class my_env extends uvm_env;
       // o_agt.is_active = UVM_PASSIVE;
    endfunction
    extern virtual function void connect_phase(uvm_phase phase);
+   extern virtual task main_phase(uvm_phase phase);
    `uvm_component_utils(my_env)
 endclass
+
+
    function void my_env::connect_phase(uvm_phase phase);
       super.connect_phase(phase);
       i_agt.ap_in.connect(agt_mdl_fifo_in.analysis_export);
@@ -39,4 +42,17 @@ endclass
       o_agt.ap_out.connect(agt_scb_fifo.analysis_export);
       scb.act_port.connect(agt_scb_fifo.blocking_get_export); 
    endfunction
+
+   task my_env::main_phase(uvm_phase phase);
+      my_sequence seq;
+      phase.raise_objection(this);
+      `uvm_info("my_env", "1", UVM_LOW);
+
+      seq = my_sequence::type_id::create("seq");
+      `uvm_info("my_env", "2", UVM_LOW);
+      seq.start(i_agt.sqr_in); 
+      `uvm_info("my_env", "3", UVM_LOW);
+      phase.drop_objection(this);
+      `uvm_info("my_env", "4", UVM_LOW);
+   endtask
 `endif

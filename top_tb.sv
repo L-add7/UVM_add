@@ -16,6 +16,7 @@ import uvm_pkg::*;
 `include "my_agent_out.sv"
 `include "my_model.sv"
 `include "my_scoreboard.sv"
+`include "my_sequence.sv"
 `include "my_env.sv"
 
 

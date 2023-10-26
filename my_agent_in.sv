@@ -29,6 +29,9 @@ endfunction
 
 function void my_agent_in::connect_phase(uvm_phase phase);
    super.connect_phase(phase);
+   if (is_active == UVM_ACTIVE) begin
+      drv_in.seq_item_port.connect(sqr_in.seq_item_export);
+   end
    ap_in = mon_in.ap_in;
 endfunction
 
